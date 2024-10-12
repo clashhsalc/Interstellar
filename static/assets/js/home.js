@@ -5,17 +5,30 @@ try {
 } catch (e) {
   inFrame = true;
 }
+
+// Check if localStorage is available and if the user is in the right context
 if (!localStorage.getItem("ab")) localStorage.setItem("ab", true);
+
 if (
   !inFrame &&
   !navigator.userAgent.includes("Firefox") &&
   localStorage.getItem("ab") === "true"
 ) {
   const popup = open("about:blank", "_blank");
+
+  // Check if the popup was blocked
   if (!popup || popup.closed) {
     alert(
-      "Please allow popups for this site. Doing so will allow us to open the site in a about:blank tab and preventing this site from showing up in your history. You can turn this off in the site settings.\n\nBy using Interstellar services, you confirm you have read and agreed to the terms listed in our Terms of Service and Privacy Policy, which can be found on the bottom of the settings page.",
+      "Please allow popups for this site to ensure proper functionality.\n\n" +
+      "You can enable popups in your browser settings. This is required to continue using our services."
     );
+    
+    // Redirect or disable functionality
+    // Option 1: Redirect to a different page
+    window.location.href = "https://www.example.com/popup-required";
+    
+    // Option 2: Disable further interactions
+    // document.body.innerHTML = "<h1>Popup required to access this site.</h1>";
   } else {
     const doc = popup.document;
     const iframe = doc.createElement("iframe");
@@ -53,7 +66,11 @@ if (
     `;
     doc.head.appendChild(script);
   }
+} else {
+  // If the user is in an iframe or already in the right context, show a warning
+  alert("This site is not accessible in an iframe or your browser does not support this feature.");
 }
+
 // Particles
 document.addEventListener("DOMContentLoaded", event => {
   if (window.localStorage.getItem("Particles") === "true") {
@@ -172,16 +189,7 @@ document.addEventListener("DOMContentLoaded", event => {
 });
 // Splash texts
 const SplashT = [
-  "Over 8 Million Users since 2023",
-  "Fastest growing proxy server",
-  "Made by xBubbo",
-  "Check out discord.gg/interstellar :)",
-  "Thanks for using the site",
-  "Follow us on Tiktok (@useinterstellar)",
-  "Subscribe to us on YouTube (@unblocking)",
-  "Subscribe to my Youtube (@xbubbo)",
   "Check out the settings page",
-  "Check out our Patreon (https://www.patreon.com/gointerstellar)",
 ];
 
 let SplashI = Math.floor(Math.random() * SplashT.length);
